@@ -25,7 +25,7 @@ unsigned short controlled_dstport = 0;
 unsigned int controlled_saddr = 0;
 unsigned int controlled_daddr = 0; 
 
-struct sk_buff *tmpskb;
+struct sk_buff tmpskb;
 struct iphdr *piphdr;
 
 int port_check(unsigned short srcport, unsigned short dstport){
@@ -127,12 +127,12 @@ int udp_check(void){
       return NF_ACCEPT;
 }
 
-unsigned int hook_func(unsigned int hooknum,struct sk_buff **skb,const struct net_device *in,const struct net_device *out,int (*okfn)(struct sk_buff *))
+unsigned int hook_func(unsigned int hooknum,struct sk_buff *skb,const struct net_device *in,const struct net_device *out,int (*okfn)(struct sk_buff *))
 {
  
 	if (enable_flag == 0)
 		return NF_ACCEPT;
-   tmpskb = *skb;
+    tmpskb = skb;
 	piphdr = ip_hdr(tmpskb);
 	
 	if(piphdr->protocol != controlled_protocol) 
